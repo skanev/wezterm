@@ -913,6 +913,10 @@ impl TerminalState {
         &self.user_vars
     }
 
+    pub fn set_user_var(&mut self, name: String, value: String) {
+        _ = &self.user_vars.insert(name, value);
+    }
+
     fn clear_semantic_attribute_due_to_movement(&mut self) {
         if self.clear_semantic_attribute_on_newline {
             self.clear_semantic_attribute_on_newline = false;

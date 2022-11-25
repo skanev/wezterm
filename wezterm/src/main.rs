@@ -369,6 +369,19 @@ Outputs the pane-id for the newly created pane on success"
         text: Option<String>,
     },
 
+    #[command(name = "set-user-variable", rename_all = "kebab")]
+    SetUserVariable {
+        /// Specify the target pane.
+        /// The default is to use the current pane based on the
+        /// environment variable WEZTERM_PANE.
+        #[arg(long)]
+        pane_id: Option<PaneId>,
+
+        name: String,
+        value: String,
+
+    },
+
     /// Activate an adjacent pane in the specified direction.
     #[command(name = "activate-pane-direction", rename_all = "kebab")]
     ActivatePaneDirection {
@@ -1080,6 +1093,15 @@ async fn run_cli_async(config: config::ConfigHandle, cli: CliCommand) -> anyhow:
                     .send_paste(codec::SendPaste { pane_id, data })
                     .await?;
             }
+        }
+        CliSubCommand::SetUserVariable {
+            pane_id,
+            name,
+            value,
+        } => {
+            let pane_id = resolve_pane_id(&client, pane_id).await?;
+
+            client.set_user_variable(codec::SetUserVariable { pane_id, name, value }).await?;
         }
         CliSubCommand::SpawnCommand {
             cwd,

@@ -336,6 +336,7 @@ pub trait Pane: Downcast {
     fn get_config(&self) -> Option<Arc<dyn TerminalConfiguration>> {
         None
     }
+    fn set_user_variable(&self, name: String, value: String);
 
     fn get_current_working_dir(&self) -> Option<Url>;
     fn get_foreground_process_name(&self) -> Option<String> {

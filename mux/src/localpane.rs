@@ -14,7 +14,7 @@ use portable_pty::{Child, ChildKiller, ExitStatus, MasterPty, PtySize};
 use procinfo::LocalProcessInfo;
 use rangeset::RangeSet;
 use smol::channel::{bounded, Receiver, TryRecvError};
-use std::borrow::Cow;
+use std::borrow::{Cow};
 use std::cell::{RefCell, RefMut};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::convert::TryInto;
@@ -367,6 +367,10 @@ impl Pane for LocalPane {
 
     fn has_unseen_output(&self) -> bool {
         self.terminal.borrow().has_unseen_output()
+    }
+
+    fn set_user_variable(&self, name: String, value: String) {
+        self.terminal.borrow_mut().set_user_var(name, value)
     }
 
     fn is_mouse_grabbed(&self) -> bool {

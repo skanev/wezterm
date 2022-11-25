@@ -660,6 +660,10 @@ impl Pane for QuickSelectOverlay {
     fn get_dimensions(&self) -> RenderableDimensions {
         self.delegate.get_dimensions()
     }
+
+    fn set_user_variable(&self, _name:String, _value:String) {
+        panic!("Quickselect");
+    }
 }
 
 impl QuickSelectRenderable {

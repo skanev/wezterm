@@ -1439,6 +1439,10 @@ impl Pane for CopyOverlay {
     fn get_dimensions(&self) -> RenderableDimensions {
         self.delegate.get_dimensions()
     }
+
+    fn set_user_variable(&self, _name:String, _value:String) {
+        panic!("Overlay/Copy");
+    }
 }
 
 fn is_whitespace_word(word: &str) -> bool {

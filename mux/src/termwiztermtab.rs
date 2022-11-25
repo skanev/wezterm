@@ -154,6 +154,10 @@ impl Pane for TermWizTerminalPane {
         );
     }
 
+    fn set_user_variable(&self, _name: String, _value: String) {
+        panic!("Don't know where I am");
+    }
+
     fn get_logical_lines(&self, lines: Range<StableRowIndex>) -> Vec<LogicalLine> {
         crate::pane::impl_get_logical_lines_via_get_lines(self, lines)
     }

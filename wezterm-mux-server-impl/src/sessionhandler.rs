@@ -6,7 +6,7 @@ use mux::domain::SplitSource;
 use mux::pane::{Pane, PaneId};
 use mux::renderable::{RenderableDimensions, StableCursorPosition};
 use mux::tab::TabId;
-use mux::Mux;
+use mux::{Mux, MuxNotification};
 use promise::spawn::spawn_into_main_thread;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -354,6 +354,28 @@ impl SessionHandler {
                                 .ok_or_else(|| anyhow!("no such pane {}", pane_id))?;
                             pane.writer().write_all(&data)?;
                             maybe_push_pane_changes(&pane, sender, per_pane)?;
+                            Ok(Pdu::UnitResponse(UnitResponse {}))
+                        },
+                        send_response,
+                    );
+                })
+                .detach();
+            }
+            Pdu::SetUserVariable(SetUserVariable { pane_id, name, value }) => {
+                spawn_into_main_thread(async move {
+                    catch(
+                        move || {
+                            let mux = Mux::get().unwrap();
+                            let pane = mux
+                                .get_pane(pane_id)
+                                .ok_or_else(|| anyhow!("no such pane {}", pane_id))?;
+
+                            pane.set_user_variable(name.clone(), value.clone());
+
+                            mux.notify(MuxNotification::Alert {
+                                pane_id: pane.pane_id(),
+                                alert: Alert::SetUserVar { name, value }
+                            });
                             Ok(Pdu::UnitResponse(UnitResponse {}))
                         },
                         send_response,

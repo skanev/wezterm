@@ -198,6 +198,10 @@ impl Pane for ClientPane {
         self.local_pane_id
     }
 
+    fn set_user_variable(&self, _name: String, _value: String) {
+        panic!("Client pane")
+    }
+
     fn get_metadata(&self) -> Value {
         let renderable = self.renderable.borrow();
         let inner = renderable.inner.borrow();

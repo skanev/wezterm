@@ -466,6 +466,7 @@ pdu! {
     MovePaneToNewTab: 48,
     MovePaneToNewTabResponse: 49,
     ActivatePaneDirection: 50,
+    SetUserVariable: 51,
 }
 
 impl Pdu {
@@ -851,6 +852,13 @@ pub struct SerializedLines {
     lines: Vec<(StableRowIndex, Line)>,
     hyperlinks: Vec<LineHyperlink>,
     images: Vec<SerializedImageCell>,
+}
+
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
+pub struct SetUserVariable {
+    pub pane_id: PaneId,
+    pub name: String,
+    pub value: String,
 }
 
 impl SerializedLines {
